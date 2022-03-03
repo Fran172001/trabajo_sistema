@@ -1,0 +1,13 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: INSTALAR VSFTPD
+      apt: name=vsftpd update_cache=yes state=latest
+    
+    - name: ESCUCHAR PUERTO 8081
+      lineinfile: dest=/etc/vsftpd.conf regexp="^#local_enable=NO" line="local_enable=YES" state=present
+    - name: VIRTUALHOST EN 8081
+      lineinfile: dest=/etc/vsftpd.conf regexp="^#write_enable=NO" line="write_enable=YES" state=present
+    - name: REINICIAR VSFTPD
+      service : name=vsftpd state=restarted
